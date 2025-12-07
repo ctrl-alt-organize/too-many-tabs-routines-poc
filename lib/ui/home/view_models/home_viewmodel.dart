@@ -166,7 +166,10 @@ class HomeViewmodel extends ChangeNotifier {
       _log.info('_updateNotifications: pinnedRoutine: $_pinnedRoutine');
       if (_pinnedRoutine == null) return;
       final halfWay = _pinnedRoutine!.lastStarted!.add(
-        Duration(minutes: _pinnedRoutine!.goal.inMinutes ~/ 2),
+        Duration(
+          minutes:
+              (_pinnedRoutine!.spent - _pinnedRoutine!.goal).inMinutes ~/ 2,
+        ),
       );
       final scheduleHalfWay = halfWay.isAfter(DateTime.now());
       _log.info(
@@ -191,7 +194,9 @@ class HomeViewmodel extends ChangeNotifier {
         }
       }
 
-      final done = _pinnedRoutine!.lastStarted!.add(_pinnedRoutine!.goal);
+      final done = _pinnedRoutine!.lastStarted!.add(
+        _pinnedRoutine!.goal - _pinnedRoutine!.spent,
+      );
       final scheduleDone = done.isAfter(DateTime.now());
       _log.info(
         '_updateNotifications: routineCompletedGoal: $done schedule: $scheduleDone',
@@ -218,7 +223,7 @@ class HomeViewmodel extends ChangeNotifier {
       }
 
       final goalIn10 = _pinnedRoutine!.lastStarted!.add(
-        _pinnedRoutine!.goal - Duration(minutes: 10),
+        _pinnedRoutine!.goal - Duration(minutes: 10) - _pinnedRoutine!.spent,
       );
       final scheduleGoalIn10 = goalIn10.isAfter(DateTime.now());
       _log.info(
@@ -246,7 +251,7 @@ class HomeViewmodel extends ChangeNotifier {
       }
 
       final goalIn5 = _pinnedRoutine!.lastStarted!.add(
-        _pinnedRoutine!.goal - Duration(minutes: 5),
+        _pinnedRoutine!.goal - Duration(minutes: 5) - _pinnedRoutine!.spent,
       );
       final scheduleGoalIn5 = goalIn5.isAfter(DateTime.now());
       _log.info(
