@@ -168,7 +168,7 @@ class HomeViewmodel extends ChangeNotifier {
       final halfWay = _pinnedRoutine!.lastStarted!.add(
         Duration(
           minutes:
-              (_pinnedRoutine!.spent - _pinnedRoutine!.goal).inMinutes ~/ 2,
+              (_pinnedRoutine!.goal - _pinnedRoutine!.spent).inMinutes ~/ 2,
         ),
       );
       final scheduleHalfWay = halfWay.isAfter(DateTime.now());
