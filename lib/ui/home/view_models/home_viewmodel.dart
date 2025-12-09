@@ -165,13 +165,17 @@ class HomeViewmodel extends ChangeNotifier {
       );
       _log.info('_updateNotifications: pinnedRoutine: $_pinnedRoutine');
       if (_pinnedRoutine == null) return;
-      final halfWay = _pinnedRoutine!.lastStarted!.add(
-        Duration(
-          minutes:
-              (_pinnedRoutine!.goal - _pinnedRoutine!.spent).inMinutes ~/ 2,
-        ),
+      final untilHalfWay = Duration(
+        minutes: (_pinnedRoutine!.goal - _pinnedRoutine!.spent).inMinutes ~/ 2,
       );
-      final scheduleHalfWay = halfWay.isAfter(DateTime.now());
+      final roundedLastStarted = _pinnedRoutine!.lastStarted!.add(
+        // e.g. if started at 12:00:40 rounded would be 12:01:00
+        // and therefore notification is delayed by 20 seconds
+        Duration(seconds: 60 - _pinnedRoutine!.lastStarted!.second),
+      );
+      final halfWay = roundedLastStarted.add(untilHalfWay);
+      final scheduleHalfWay =
+          untilHalfWay.inMinutes >= 40 && halfWay.isAfter(DateTime.now());
       _log.info(
         '_updateNotifications: routineHalfGoal: $halfWay schedule: $scheduleHalfWay',
       );
@@ -194,7 +198,7 @@ class HomeViewmodel extends ChangeNotifier {
         }
       }
 
-      final done = _pinnedRoutine!.lastStarted!.add(
+      final done = roundedLastStarted.add(
         _pinnedRoutine!.goal - _pinnedRoutine!.spent,
       );
       final scheduleDone = done.isAfter(DateTime.now());
@@ -222,7 +226,7 @@ class HomeViewmodel extends ChangeNotifier {
         }
       }
 
-      final goalIn10 = _pinnedRoutine!.lastStarted!.add(
+      final goalIn10 = roundedLastStarted.add(
         _pinnedRoutine!.goal - Duration(minutes: 10) - _pinnedRoutine!.spent,
       );
       final scheduleGoalIn10 = goalIn10.isAfter(DateTime.now());
@@ -250,7 +254,7 @@ class HomeViewmodel extends ChangeNotifier {
         }
       }
 
-      final goalIn5 = _pinnedRoutine!.lastStarted!.add(
+      final goalIn5 = roundedLastStarted.add(
         _pinnedRoutine!.goal - Duration(minutes: 5) - _pinnedRoutine!.spent,
       );
       final scheduleGoalIn5 = goalIn5.isAfter(DateTime.now());
@@ -311,7 +315,7 @@ class HomeViewmodel extends ChangeNotifier {
           return Result.error(resultGetRoutine.error);
         case Ok<RoutineSummary>():
           _log.fine(
-            '_updateRoutineGoal: refreshed routine id=${resultGetRoutine.value.id} label=${resultGetRoutine.value.name}',
+            '_updateRoutineGoal: resultGetRoutine: ${resultGetRoutine.value}',
           );
           _routines = _routines.map((routine) {
             if (routine.id == request.routineID) {
@@ -354,9 +358,7 @@ class HomeViewmodel extends ChangeNotifier {
         case Ok<RoutineSummary>():
       }
 
-      _log.info(
-        '_startOrStopRoutine: routine $id "${resultRoutine.value.name}" lastStarted=${resultRoutine.value.lastStarted} running=${resultRoutine.value.running}',
-      );
+      _log.info('_startOrStopRoutine: routine ${resultRoutine.value}');
 
       final Result<void> resultSwitch;
       final String action;
@@ -387,9 +389,7 @@ class HomeViewmodel extends ChangeNotifier {
           _routines = resultRefresh.value;
           _log.fine('Loaded routines');
           for (final routine in resultRefresh.value) {
-            _log.info(
-              'Routine [${routine.name} id=${routine.id}] [${routine.running ? 'running' : 'not running'}]',
-            );
+            _log.info('_startOrStopRoutine: resultRefresh: $routine');
           }
       }
 
