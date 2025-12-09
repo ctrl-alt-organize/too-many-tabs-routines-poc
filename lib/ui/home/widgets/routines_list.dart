@@ -38,9 +38,16 @@ class RoutinesList extends StatelessWidget {
                   return viewModel.startOrStopRoutine.completed;
                 },
                 archive: (_) async {
-                  await viewModel.archiveRoutine.execute(
+                  await viewModel.archiveOrBinRoutine.execute((
                     viewModel.routines[index].id,
-                  );
+                    false, // archive (bin=false)
+                  ));
+                },
+                bin: (_) async {
+                  await viewModel.archiveOrBinRoutine.execute((
+                    viewModel.routines[index].id,
+                    true, // set bin=true
+                  ));
                 },
               ),
             ),

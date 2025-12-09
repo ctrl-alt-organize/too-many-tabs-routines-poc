@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:too_many_tabs/domain/models/routines/routine_summary.dart';
+import 'package:too_many_tabs/ui/core/ui/routine_action.dart';
 import 'package:too_many_tabs/ui/home/widgets/routine_goal_label.dart';
 import 'package:too_many_tabs/ui/home/widgets/routine_spent_dynamic_label.dart';
 
@@ -11,12 +12,12 @@ class Routine extends StatelessWidget {
     required this.onTap,
     required this.onSwitch,
     required this.archive,
+    required this.bin,
   });
 
   final RoutineSummary routine;
   final GestureTapCallback onTap;
-  final Function(BuildContext) onSwitch;
-  final Function(BuildContext) archive;
+  final Function(BuildContext) onSwitch, archive, bin;
 
   @override
   Widget build(BuildContext context) {
@@ -28,40 +29,30 @@ class Routine extends StatelessWidget {
       endActionPane: ActionPane(
         motion: BehindMotion(),
         children: [
-          SlidableAction(
-            backgroundColor: routine.running
-                ? (darkMode // stop
-                      ? colorScheme.surfaceContainerLow
-                      : colorScheme.tertiary)
-                : (darkMode // start
-                      ? colorScheme.surfaceContainerLow
-                      : colorScheme.primary),
-            foregroundColor: routine.running
-                ? (darkMode // stop
-                      ? colorScheme.onSurface
-                      : colorScheme.onTertiary)
-                : (darkMode // start
-                      ? colorScheme.primary
-                      : colorScheme.onPrimary),
-            onPressed: onSwitch,
+          RoutineAction(
             icon: routine.running ? Icons.stop : Icons.timer,
+            state: routine.running
+                ? RoutineActionState.toStop
+                : RoutineActionState.toStart,
             label: routine.running ? 'Stop' : 'Start',
+            onPressed: onSwitch,
           ),
         ],
       ),
       startActionPane: ActionPane(
         motion: ScrollMotion(),
         children: [
-          SlidableAction(
-            backgroundColor: darkMode
-                ? colorScheme.surfaceContainerLow
-                : colorScheme.inverseSurface,
-            foregroundColor: darkMode
-                ? colorScheme.onSurface
-                : colorScheme.onInverseSurface,
-            onPressed: archive,
+          RoutineAction(
             icon: Icons.archive,
-            label: 'Archive',
+            state: RoutineActionState.toArchive,
+            label: 'Backlog',
+            onPressed: archive,
+          ),
+          RoutineAction(
+            icon: Icons.delete,
+            state: RoutineActionState.toTrash,
+            label: 'Trash',
+            onPressed: archive,
           ),
         ],
       ),

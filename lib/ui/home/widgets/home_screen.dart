@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:path/path.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:too_many_tabs/domain/models/routines/routine_summary.dart';
 import 'package:too_many_tabs/routing/routes.dart';
 import 'package:too_many_tabs/ui/core/loader.dart';
+import 'package:too_many_tabs/ui/core/ui/header_action.dart';
 import 'package:too_many_tabs/ui/home/view_models/home_viewmodel.dart';
 import 'package:too_many_tabs/ui/home/widgets/header_routines_dynamic_goal_label.dart';
-import 'package:too_many_tabs/ui/home/widgets/slide_up.dart';
 import 'package:too_many_tabs/ui/home/widgets/new_routine.dart';
+import 'package:too_many_tabs/ui/home/widgets/slide_up.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.viewModel});
@@ -108,29 +106,11 @@ class HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
-          IconButton(
+          HeaderAction(
             onPressed: () {
               context.go(Routes.archives);
             },
-            icon: Icon(Icons.archive),
-            color: darkMode
-                ? colorScheme.onPrimaryContainer
-                : colorScheme.primary,
-          ),
-          IconButton(
-            onPressed: () async {
-              final path = await getDatabasesPath();
-              await SharePlus.instance.share(
-                ShareParams(
-                  files: [XFile(join(path, "state.db"))],
-                  title: 'Save state.db',
-                ),
-              );
-            },
-            icon: Icon(Icons.download),
-            color: darkMode
-                ? colorScheme.onPrimaryContainer
-                : colorScheme.primary,
+            icon: Icons.archive,
           ),
         ],
       ),

@@ -9,12 +9,11 @@ class Routine extends StatelessWidget {
     super.key,
     required this.routine,
     required this.restore,
-    required this.trash,
     required this.index,
   });
 
   final RoutineSummary routine;
-  final void Function(BuildContext) restore, trash;
+  final void Function(BuildContext) restore;
   final int index;
 
   @override
@@ -33,20 +32,9 @@ class Routine extends StatelessWidget {
         children: [
           RoutineAction(
             onPressed: restore,
-            icon: Icons.add_task,
-            state: RoutineActionState.toReschedule,
-            label: 'Schedule',
-          ),
-        ],
-      ),
-      startActionPane: ActionPane(
-        motion: BehindMotion(),
-        children: [
-          RoutineAction(
-            onPressed: trash,
-            icon: Icons.delete,
-            state: RoutineActionState.toTrash,
-            label: 'Trash',
+            icon: Icons.archive,
+            state: RoutineActionState.toArchive,
+            label: 'Restore',
           ),
         ],
       ),

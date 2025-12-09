@@ -20,17 +20,63 @@ class RoutinesRepositoryLocal implements RoutinesRepository {
   Future<Result<void>> restoreRoutine(int id) async {
     final resultLog = await _databaseClient.updateRoutineLog(
       id,
+      RoutineState.restoredFromBin,
+      DateTime.now(),
+    );
+    switch (resultLog) {
+      case Error<void>():
+        _log.warning('restoreRoutine: updateRoutineLog: ${resultLog.error}');
+        return resultLog;
+      case Ok<void>():
+        _log.fine('restoreRoutine: updated routine log: restoredFromBin');
+    }
+    return _databaseClient.updateRoutineStore(
+      routineId: id,
+      archives: true,
+      bin: false,
+    );
+  }
+
+  @override
+  Future<Result<void>> scheduleRoutine(int id) async {
+    final resultLog = await _databaseClient.updateRoutineLog(
+      id,
       RoutineState.restoredFromArchives,
       DateTime.now(),
     );
     switch (resultLog) {
       case Error<void>():
-        _log.warning('archiveRoutine: updateRoutineLog: ${resultLog.error}');
+        _log.warning('scheduleRoutine: updateRoutineLog: ${resultLog.error}');
         return resultLog;
       case Ok<void>():
-        _log.fine('archiveRoutine: updated routine log: restoredFromArchives');
+        _log.fine('scheduleRoutine: updated routine log: restoredFromArchives');
     }
-    return _databaseClient.updateRoutineStore(routineId: id, archives: false);
+    return _databaseClient.updateRoutineStore(
+      routineId: id,
+      archives: false,
+      bin: false,
+    );
+  }
+
+  @override
+  Future<Result<void>> binRoutine(int id) async {
+    final resultLog = await _databaseClient.updateRoutineLog(
+      id,
+      RoutineState.movedToBin,
+      DateTime.now(),
+    );
+    switch (resultLog) {
+      case Error<void>():
+        _log.warning('binRoutine: updateRoutineLog: ${resultLog.error}');
+        return resultLog;
+      case Ok<void>():
+        _log.fine('binRoutine: updated routine log movedToBin');
+    }
+    return _databaseClient.updateRoutineStore(
+      routineId: id,
+      archives: false,
+      bin: true,
+    );
   }
 
   @override
@@ -47,14 +93,22 @@ class RoutinesRepositoryLocal implements RoutinesRepository {
       case Ok<void>():
         _log.fine('archiveRoutine: updated routine log movedToArchives');
     }
-    return _databaseClient.updateRoutineStore(routineId: id, archives: true);
+    return _databaseClient.updateRoutineStore(
+      routineId: id,
+      archives: true,
+      bin: false,
+    );
   }
 
   @override
   Future<Result<List<RoutineSummary>>> getRoutinesList({
     required bool archived,
+    required bool binned,
   }) async {
-    final resultGet = await _databaseClient.getRoutines(archived: archived);
+    final resultGet = await _databaseClient.getRoutines(
+      archived: archived,
+      binned: binned,
+    );
     switch (resultGet) {
       case Error<List<RoutineSummary>>():
         _log.warning('db client get routines: ${resultGet.error}');

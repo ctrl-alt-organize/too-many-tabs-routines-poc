@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:path/path.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:too_many_tabs/routing/routes.dart';
-import 'package:too_many_tabs/ui/archives/view_models/archives_viewmodel.dart';
-import 'package:too_many_tabs/ui/archives/widgets/routine.dart';
+import 'package:too_many_tabs/ui/bin/widgets/routine.dart';
+import 'package:too_many_tabs/ui/bin/view_models/bin_viewmodel.dart';
 import 'package:too_many_tabs/ui/core/loader.dart';
 import 'package:too_many_tabs/ui/core/ui/header_action.dart';
 
-class ArchivesScreen extends StatefulWidget {
-  const ArchivesScreen({super.key, required this.viewModel});
+class BinScreen extends StatefulWidget {
+  const BinScreen({super.key, required this.viewModel});
 
-  final ArchivesViewmodel viewModel;
+  final BinViewmodel viewModel;
 
   @override
   createState() => _ArchivesScreenState();
 }
 
-class _ArchivesScreenState extends State<ArchivesScreen> {
+class _ArchivesScreenState extends State<BinScreen> {
   late final AppLifecycleListener _listener;
 
   @override
@@ -51,7 +48,7 @@ class _ArchivesScreenState extends State<ArchivesScreen> {
           child: Row(
             children: [
               Text(
-                'Backlog',
+                'Archives',
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: 18,
@@ -65,22 +62,10 @@ class _ArchivesScreenState extends State<ArchivesScreen> {
         ),
         actions: [
           HeaderAction(
-            onPressed: () async {
-              final path = await getDatabasesPath();
-              await SharePlus.instance.share(
-                ShareParams(
-                  files: [XFile(join(path, "state.db"))],
-                  title: 'Save state.db',
-                ),
-              );
-            },
-            icon: Icons.download,
-          ),
-          HeaderAction(
             onPressed: () {
-              context.go(Routes.bin);
+              context.go(Routes.archives);
             },
-            icon: Icons.delete,
+            icon: Icons.archive,
           ),
           HeaderAction(
             onPressed: () {
@@ -117,14 +102,6 @@ class _ArchivesScreenState extends State<ArchivesScreen> {
                         routine: widget.viewModel.routines[index],
                         restore: (context) async {
                           await widget.viewModel.restore.execute(
-                            widget.viewModel.routines[index].id,
-                          );
-                          if (context.mounted) {
-                            context.go(Routes.home);
-                          }
-                        },
-                        trash: (context) async {
-                          await widget.viewModel.bin.execute(
                             widget.viewModel.routines[index].id,
                           );
                           await widget.viewModel.load.execute();
