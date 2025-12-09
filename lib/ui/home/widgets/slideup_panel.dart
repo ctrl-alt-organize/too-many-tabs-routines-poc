@@ -219,13 +219,18 @@ class _GoalSelect extends StatefulWidget {
 
 class _GoalSelectState extends State<_GoalSelect> {
   int hoursIndex = 0, minutesIndex = 1; // default is 0h30min
+
+  @override
+  @override
+  void initState() {
+    final initialIndex = indexGoal(widget.routineGoal);
+    hoursIndex = initialIndex.$1;
+    minutesIndex = initialIndex.$2;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final initialIndex = indexGoal(widget.routineGoal);
-    setState(() {
-      hoursIndex = initialIndex.$1;
-      minutesIndex = initialIndex.$2;
-    });
     final colorScheme = Theme.of(context).colorScheme;
     final darkMode = Theme.of(context).brightness == Brightness.dark;
 
