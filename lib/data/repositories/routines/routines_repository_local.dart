@@ -118,7 +118,7 @@ class RoutinesRepositoryLocal implements RoutinesRepository {
 
     List<RoutineSummary> routines = [];
     for (final routine in resultGet.value) {
-      _log.info('_dailyCheck ${routine.id}');
+      _log.fine('_dailyCheck ${routine.id}');
       final resultCheck = await _dailyCheck(routine.id);
       switch (resultCheck) {
         case Error<RoutineSummary>():
@@ -138,7 +138,7 @@ class RoutinesRepositoryLocal implements RoutinesRepository {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    _log.info('_dailyCheck $routineID: last log started');
+    _log.fine('_dailyCheck $routineID: last log started');
     final resultStarted = await _databaseClient.lastLog(
       routineID,
       RoutineState.started,
@@ -157,7 +157,7 @@ class RoutinesRepositoryLocal implements RoutinesRepository {
           if (resultStarted.value!.isBefore(today)) {
             // therefore we need to reset routine "spent" attribute
             needSpentReset = true;
-            _log.info('_dailyCheck $routineID: last log stopped');
+            _log.fine('_dailyCheck $routineID: last log stopped');
             final resultStopped = await _databaseClient.lastLog(
               routineID,
               RoutineState.stopped,
@@ -181,7 +181,7 @@ class RoutinesRepositoryLocal implements RoutinesRepository {
           }
         }
         if (needLogStop) {
-          _log.info('_dailyCheck $routineID: logStop');
+          _log.fine('_dailyCheck $routineID: logStop');
           final resultStop = await logStop(routineID, now);
           switch (resultStop) {
             case Error<void>():
@@ -191,7 +191,7 @@ class RoutinesRepositoryLocal implements RoutinesRepository {
           }
         }
         if (needSpentReset) {
-          _log.info('_dailyCheck $routineID: spent reset');
+          _log.fine('_dailyCheck $routineID: spent reset');
           final resultUpdateSpent = await _databaseClient.updateRoutineSpent(
             routineID,
             Duration(),
@@ -205,7 +205,7 @@ class RoutinesRepositoryLocal implements RoutinesRepository {
             case Ok<void>():
           }
 
-          _log.info('_dailyCheck $routineID: running reset');
+          _log.fine('_dailyCheck $routineID: running reset');
           final resultUpdateRunning = await _databaseClient
               .updateRoutineRunning(routineID, false);
           switch (resultUpdateRunning) {

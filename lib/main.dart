@@ -37,7 +37,7 @@ void main() async {
       ].join(' '),
     );
     final client = DatabaseClient(db: db);
-    if (record.level >= Level.WARNING) {
+    if (record.level >= Level.INFO) {
       client.log(
         level: record.level.name,
         time: record.time,
@@ -100,7 +100,7 @@ Future<void> _configureLocalTimeZone() async {
   tz.initializeTimeZones();
   //final timeZoneInfo = await FlutterTimezone.getLocalTimezone('UTC+1');
   tz.setLocalLocation(tz.getLocation('Africa/Casablanca'));
-  log.info('timeZoneInfo: ${tz.local}');
+  log.fine('timeZoneInfo: ${tz.local}');
 }
 
 class MainApp extends StatelessWidget {

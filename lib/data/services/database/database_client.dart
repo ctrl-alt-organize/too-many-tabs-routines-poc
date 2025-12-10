@@ -128,7 +128,7 @@ class DatabaseClient {
       running: running == 0 ? false : true,
       lastStarted: lastStarted,
     );
-    _log.info('_extractRoutineSummary: $summary');
+    _log.fine('_extractRoutineSummary: $summary');
 
     return Result.ok(summary);
   }

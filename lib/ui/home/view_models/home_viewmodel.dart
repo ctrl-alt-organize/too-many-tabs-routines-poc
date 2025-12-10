@@ -155,7 +155,7 @@ class HomeViewmodel extends ChangeNotifier {
 
   Future<void> _updateNotifications() async {
     try {
-      _log.info('_updateNotifications: tz.local: ${tz.local}');
+      _log.fine('_updateNotifications: tz.local: ${tz.local}');
       const notificationDetails = NotificationDetails(
         iOS: DarwinNotificationDetails(
           presentAlert: true,
@@ -171,10 +171,10 @@ class HomeViewmodel extends ChangeNotifier {
       ]) {
         await _notificationsPlugin.cancel(code.code);
       }
-      _log.info(
+      _log.fine(
         '_updateNotifications: cancelled routineHalfGoal, routineCompletedGoal',
       );
-      _log.info('_updateNotifications: pinnedRoutine: $_pinnedRoutine');
+      _log.fine('_updateNotifications: pinnedRoutine: $_pinnedRoutine');
       if (_pinnedRoutine == null) return;
       final untilHalfWay = Duration(
         minutes: (_pinnedRoutine!.goal - _pinnedRoutine!.spent).inMinutes ~/ 2,
@@ -187,7 +187,7 @@ class HomeViewmodel extends ChangeNotifier {
       final halfWay = roundedLastStarted.add(untilHalfWay);
       final scheduleHalfWay =
           untilHalfWay.inMinutes >= 40 && halfWay.isAfter(DateTime.now());
-      _log.info(
+      _log.fine(
         '_updateNotifications: routineHalfGoal: $halfWay schedule: $scheduleHalfWay',
       );
       if (scheduleHalfWay) {
@@ -201,7 +201,7 @@ class HomeViewmodel extends ChangeNotifier {
             notificationDetails,
             androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           );
-          _log.info(
+          _log.fine(
             '_updateNotifications: scheduled routineHalfGoal at $halfWayTime',
           );
         } catch (e) {
@@ -213,7 +213,7 @@ class HomeViewmodel extends ChangeNotifier {
         _pinnedRoutine!.goal - _pinnedRoutine!.spent,
       );
       final scheduleDone = done.isAfter(DateTime.now());
-      _log.info(
+      _log.fine(
         '_updateNotifications: routineCompletedGoal: $done schedule: $scheduleDone',
       );
       if (scheduleDone) {
@@ -227,7 +227,7 @@ class HomeViewmodel extends ChangeNotifier {
             notificationDetails,
             androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           );
-          _log.info(
+          _log.fine(
             '_updateNotifications: scheduled routineHalfGoal at $doneTime',
           );
         } catch (e) {
@@ -241,7 +241,7 @@ class HomeViewmodel extends ChangeNotifier {
         _pinnedRoutine!.goal - Duration(minutes: 10) - _pinnedRoutine!.spent,
       );
       final scheduleGoalIn10 = goalIn10.isAfter(DateTime.now());
-      _log.info(
+      _log.fine(
         '_updateNotifications: routineGoalIn10Minutes: $goalIn10 schedule: $scheduleGoalIn10',
       );
       if (scheduleGoalIn10) {
@@ -255,7 +255,7 @@ class HomeViewmodel extends ChangeNotifier {
             notificationDetails,
             androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           );
-          _log.info(
+          _log.fine(
             '_updateNotifications: scheduled routineGoalIn10Minutes at $t',
           );
         } catch (e) {
@@ -341,7 +341,7 @@ class HomeViewmodel extends ChangeNotifier {
         case Ok<RoutineSummary>():
       }
 
-      _log.info('_startOrStopRoutine: routine ${resultRoutine.value}');
+      _log.fine('_startOrStopRoutine: routine ${resultRoutine.value}');
 
       final Result<void> resultSwitch;
       final String action;
@@ -373,7 +373,7 @@ class HomeViewmodel extends ChangeNotifier {
           _routines = resultRefresh.value;
           _log.fine('Loaded routines');
           for (final routine in resultRefresh.value) {
-            _log.info('_startOrStopRoutine: resultRefresh: $routine');
+            _log.fine('_startOrStopRoutine: resultRefresh: $routine');
           }
       }
 
