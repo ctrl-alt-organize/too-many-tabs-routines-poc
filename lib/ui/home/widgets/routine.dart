@@ -43,15 +43,15 @@ class Routine extends StatelessWidget {
         motion: ScrollMotion(),
         children: [
           RoutineAction(
-            icon: Icons.archive,
-            state: RoutineActionState.toArchive,
-            label: 'Backlog',
-            onPressed: archive,
-          ),
-          RoutineAction(
             icon: Icons.delete,
             state: RoutineActionState.toTrash,
             label: 'Trash',
+            onPressed: archive,
+          ),
+          RoutineAction(
+            icon: Icons.archive,
+            state: RoutineActionState.toArchive,
+            label: 'Backlog',
             onPressed: archive,
           ),
         ],
