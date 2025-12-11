@@ -186,7 +186,7 @@ class HomeViewmodel extends ChangeNotifier {
       );
       final halfWay = roundedLastStarted.add(untilHalfWay);
       final scheduleHalfWay =
-          untilHalfWay.inMinutes >= 40 && halfWay.isAfter(DateTime.now());
+          untilHalfWay.inMinutes >= 20 && halfWay.isAfter(DateTime.now());
       _log.fine(
         '_updateNotifications: routineHalfGoal: $halfWay schedule: $scheduleHalfWay',
       );
