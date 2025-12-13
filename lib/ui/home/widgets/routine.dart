@@ -30,7 +30,7 @@ class Routine extends StatelessWidget {
         children: [
           RoutineAction(
             icon: Icons.archive,
-            state: RoutineActionState.toArchive,
+            state: ApplicationAction.backlogRoutine,
             label: 'Backlog',
             onPressed: (_) {
               archive();

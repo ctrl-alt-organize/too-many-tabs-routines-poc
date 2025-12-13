@@ -38,7 +38,7 @@ class Routine extends StatelessWidget {
               restore();
             },
             icon: Icons.add_task,
-            state: RoutineActionState.toReschedule,
+            state: ApplicationAction.rescheduleRoutine,
             label: 'Schedule',
           ),
         ],
@@ -52,7 +52,7 @@ class Routine extends StatelessWidget {
               trash();
             },
             icon: Icons.delete,
-            state: RoutineActionState.toTrash,
+            state: ApplicationAction.archiveRoutine,
             label: 'Trash',
           ),
         ],

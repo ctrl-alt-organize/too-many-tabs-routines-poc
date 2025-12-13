@@ -204,7 +204,7 @@ class HomeScreenState extends State<HomeScreen> {
                       }),
                       colorComposition: colorCompositionFromAction(
                         context,
-                        RoutineActionState.toAdd,
+                        ApplicationAction.addRoutine,
                       ),
                       verticalOffset: verticalOffset,
                     ),
@@ -214,13 +214,13 @@ class HomeScreenState extends State<HomeScreen> {
                 : Align(
                     alignment: Alignment.bottomLeft,
                     child: FloatingAction(
-                      icon: Icons.archive,
+                      icon: Icons.menu,
                       onPressed: () {
                         context.go(Routes.archives);
                       },
                       colorComposition: colorCompositionFromAction(
                         context,
-                        RoutineActionState.toArchive,
+                        ApplicationAction.backlogRoutine,
                       ),
                       verticalOffset: verticalOffset,
                     ),

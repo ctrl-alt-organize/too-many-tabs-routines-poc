@@ -9,32 +9,34 @@ class ColorComposition {
   });
   final Color foreground;
   final Color background;
-  final RoutineActionState action;
+  final ApplicationAction action;
 }
 
 ColorComposition colorCompositionFromAction(
   BuildContext context,
-  RoutineActionState action,
+  ApplicationAction action,
 ) {
   final Color background, foreground;
   final colorScheme = Theme.of(context).colorScheme;
   final darkMode = Theme.of(context).brightness == Brightness.dark;
   switch (action) {
-    case RoutineActionState.toStart:
-    case RoutineActionState.toHome:
+    case ApplicationAction.startRoutine:
+    case ApplicationAction.toHome:
       foreground = darkMode ? colorScheme.primary : colorScheme.onPrimary;
       background = darkMode
           ? colorScheme.surfaceContainerLow
           : colorScheme.primary;
       break;
-    case RoutineActionState.toStop:
+    case ApplicationAction.stopRoutine:
       foreground = darkMode ? colorScheme.onSurface : colorScheme.onTertiary;
       background = darkMode
           ? colorScheme.surfaceContainerLow
           : colorScheme.tertiary;
       break;
-    case RoutineActionState.toArchive:
-    case RoutineActionState.toTrash:
+    case ApplicationAction.backlogRoutine:
+    case ApplicationAction.archiveRoutine:
+    case ApplicationAction.toBacklog:
+    case ApplicationAction.toArchive:
       foreground = darkMode
           ? colorScheme.onSurface
           : colorScheme.onInverseSurface;
@@ -42,12 +44,12 @@ ColorComposition colorCompositionFromAction(
           ? colorScheme.surfaceContainerLow
           : colorScheme.inverseSurface;
       break;
-    case RoutineActionState.toReschedule:
-    case RoutineActionState.toRestore:
+    case ApplicationAction.rescheduleRoutine:
+    case ApplicationAction.restoreRoutine:
       foreground = colorScheme.primary;
       background = colorScheme.surface;
       break;
-    case RoutineActionState.toAdd:
+    case ApplicationAction.addRoutine:
       background = darkMode
           ? colorScheme.primaryContainer
           : colorScheme.primary;
@@ -73,7 +75,7 @@ class RoutineAction extends StatelessWidget {
   });
 
   final Function(BuildContext) onPressed;
-  final RoutineActionState state;
+  final ApplicationAction state;
   final IconData icon;
   final String label;
 
@@ -90,17 +92,19 @@ class RoutineAction extends StatelessWidget {
   }
 }
 
-enum RoutineActionState {
-  toStart(0),
-  toStop(1),
-  toArchive(2),
-  toTrash(3),
-  toReschedule(4),
-  toRestore(5),
-  toAdd(6),
-  toHome(7);
+enum ApplicationAction {
+  startRoutine(0),
+  stopRoutine(1),
+  backlogRoutine(2),
+  archiveRoutine(3),
+  rescheduleRoutine(4),
+  restoreRoutine(5),
+  addRoutine(6),
+  toHome(7),
+  toBacklog(8),
+  toArchive(9);
 
-  const RoutineActionState(this.code);
+  const ApplicationAction(this.code);
 
   final int code;
 }

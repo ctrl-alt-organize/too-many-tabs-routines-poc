@@ -118,10 +118,10 @@ class _ArchivesScreenState extends State<ArchivesScreen> {
                 onPressed: () {
                   context.go(Routes.bin);
                 },
-                icon: Icons.delete,
+                icon: Icons.archive,
                 colorComposition: colorCompositionFromAction(
                   context,
-                  RoutineActionState.toTrash,
+                  ApplicationAction.archiveRoutine,
                 ),
               ),
             ),
@@ -132,7 +132,7 @@ class _ArchivesScreenState extends State<ArchivesScreen> {
                 icon: Icons.home,
                 colorComposition: colorCompositionFromAction(
                   context,
-                  RoutineActionState.toHome,
+                  ApplicationAction.toHome,
                 ),
               ),
             ),

@@ -108,10 +108,21 @@ class _ArchivesScreenState extends State<BinScreen> {
               alignment: Alignment.bottomRight,
               child: FloatingAction(
                 onPressed: () => context.go(Routes.archives),
-                icon: Icons.archive,
+                icon: Icons.menu,
                 colorComposition: colorCompositionFromAction(
                   context,
-                  RoutineActionState.toArchive,
+                  ApplicationAction.backlogRoutine,
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: FloatingAction(
+                onPressed: () => context.go(Routes.home),
+                icon: Icons.home,
+                colorComposition: colorCompositionFromAction(
+                  context,
+                  ApplicationAction.toHome,
                 ),
               ),
             ),
