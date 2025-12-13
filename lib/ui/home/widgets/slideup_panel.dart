@@ -488,13 +488,15 @@ class _RoutineETAState extends State<_RoutineETA> with RestorationMixin {
   build(BuildContext context) {
     const style = TextStyle(fontWeight: FontWeight.w300, fontSize: 12);
     if (_leftMinutes.value >= 0) {
-      final eta = widget.routine.lastStarted!.add(
-        Duration(minutes: _leftMinutes.value),
-      );
+      final eta = DateTime.now().add(Duration(minutes: _leftMinutes.value));
       final hours = eta.hour.toString();
       final minutes = (eta.minute + 1).toString().padLeft(2, '0');
       return Text('(ETA: $hours:$minutes)', style: style);
     }
+    // this block is the only reason we need to  track of _leftMinutes, though,
+    // we might be able to stick with a stateless widget and leave the
+    // computation (that should happen only once) to the listenable builder
+    // building the Collapsed widget.
     return Text(
       '(reached ${formatUntilGoal(widget.routine.goal, Duration())})',
       style: style,
