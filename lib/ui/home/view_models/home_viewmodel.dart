@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logging/logging.dart';
 import 'package:too_many_tabs/data/repositories/routines/routines_repository.dart';
 import 'package:too_many_tabs/domain/models/routines/routine_summary.dart';
+import 'package:too_many_tabs/notifications.dart';
 import 'package:too_many_tabs/ui/home/view_models/goal_update.dart';
 import 'package:too_many_tabs/utils/command.dart';
 import 'package:too_many_tabs/utils/notification_code.dart';
@@ -156,13 +157,6 @@ class HomeViewmodel extends ChangeNotifier {
   Future<void> _updateNotifications() async {
     try {
       _log.fine('_updateNotifications: tz.local: ${tz.local}');
-      const notificationDetails = NotificationDetails(
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-          presentSound: true,
-          interruptionLevel: InterruptionLevel.timeSensitive,
-        ),
-      );
       for (final code in [
         NotificationCode.routineCompletedGoal,
         NotificationCode.routineHalfGoal,
@@ -191,18 +185,15 @@ class HomeViewmodel extends ChangeNotifier {
         '_updateNotifications: routineHalfGoal: $halfWay schedule: $scheduleHalfWay',
       );
       if (scheduleHalfWay) {
-        final halfWayTime = tz.TZDateTime.from(halfWay, tz.local);
         try {
-          await _notificationsPlugin.zonedSchedule(
-            NotificationCode.routineHalfGoal.code,
-            _pinnedRoutine!.name,
-            "We're halfway there!",
-            halfWayTime,
-            notificationDetails,
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          final sched = await scheduleNotification(
+            title: _pinnedRoutine!.name,
+            body: "We're halfway there!",
+            id: NotificationCode.routineHalfGoal,
+            schedule: halfWay,
           );
           _log.fine(
-            '_updateNotifications: scheduled routineHalfGoal at $halfWayTime',
+            '_updateNotifications: scheduled routineHalfGoal at $sched',
           );
         } catch (e) {
           _log.warning('_updateNotifications: schedule routineHalfGoal: $e');
@@ -217,18 +208,15 @@ class HomeViewmodel extends ChangeNotifier {
         '_updateNotifications: routineCompletedGoal: $done schedule: $scheduleDone',
       );
       if (scheduleDone) {
-        final doneTime = tz.TZDateTime.from(done, tz.local);
         try {
-          await _notificationsPlugin.zonedSchedule(
-            NotificationCode.routineCompletedGoal.code,
-            _pinnedRoutine!.name,
-            "We're Done! That's a wrap.",
-            doneTime,
-            notificationDetails,
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          final sched = await scheduleNotification(
+            title: _pinnedRoutine!.name,
+            body: 'We\'re Done!',
+            id: NotificationCode.routineCompletedGoal,
+            schedule: done,
           );
           _log.fine(
-            '_updateNotifications: scheduled routineHalfGoal at $doneTime',
+            '_updateNotifications: scheduled routineHalfGoal at $sched',
           );
         } catch (e) {
           _log.warning(
@@ -245,18 +233,15 @@ class HomeViewmodel extends ChangeNotifier {
         '_updateNotifications: routineGoalIn10Minutes: $goalIn10 schedule: $scheduleGoalIn10',
       );
       if (scheduleGoalIn10) {
-        final t = tz.TZDateTime.from(goalIn10, tz.local);
         try {
-          await _notificationsPlugin.zonedSchedule(
-            NotificationCode.routineGoalIn10Minutes.code,
-            _pinnedRoutine!.name,
-            "Time to wrap up! 10 mins left.",
-            t,
-            notificationDetails,
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          final sched = await scheduleNotification(
+            title: _pinnedRoutine!.name,
+            body: 'Time to wrap up! 10 mins left.',
+            id: NotificationCode.routineGoalIn10Minutes,
+            schedule: goalIn10,
           );
           _log.fine(
-            '_updateNotifications: scheduled routineGoalIn10Minutes at $t',
+            '_updateNotifications: scheduled routineGoalIn10Minutes at $sched',
           );
         } catch (e) {
           _log.warning(

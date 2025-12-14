@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:too_many_tabs/config/dependencies.dart';
 import 'package:too_many_tabs/data/services/database/database_client.dart';
 import 'package:too_many_tabs/data/services/database/database_prepare.dart';
+import 'package:too_many_tabs/notifications.dart';
 import 'package:too_many_tabs/routing/router.dart';
 import 'package:too_many_tabs/ui/core/themes/theme.dart';
 import 'package:too_many_tabs/ui/core/ui/scroll_behavior.dart';
@@ -47,44 +48,39 @@ void main() async {
     }
   });
 
-  final notificationsPlugin = FlutterLocalNotificationsPlugin();
-  final notificationsPluginDarwinSettings = DarwinInitializationSettings();
-  final notificationsInitializationSettings = InitializationSettings(
-    iOS: notificationsPluginDarwinSettings,
+  final List<DarwinNotificationCategory> darwinNotificationCategories = [];
+
+  final initializationSettingsDarwin = DarwinInitializationSettings(
+    requestAlertPermission: false,
+    requestBadgePermission: false,
+    requestSoundPermission: false,
+    notificationCategories: darwinNotificationCategories,
   );
-  await notificationsPlugin.initialize(
-    notificationsInitializationSettings,
-    onDidReceiveNotificationResponse: (notification) {},
+
+  final initializationSettings = InitializationSettings(
+    iOS: initializationSettingsDarwin,
   );
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: selectNotificationStream.add,
+  );
+
+  // final notificationAppLaunchDetails = await flutterLocalNotificationsPlugin
+  //     .getNotificationAppLaunchDetails();
+
+  await _configureLocalTimeZone();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  // await notificationsPlugin.show(
-  //   0,
-  //   'Routines',
-  //   'Update',
-  //   NotificationDetails(iOS: DarwinNotificationDetails(presentAlert: true)),
-  //   payload: 'item',
-  // );
-
-  await _configureLocalTimeZone();
-  //await notificationsPlugin.zonedSchedule(
-  //  0,
-  //  'Routines',
-  //  'Scheduled',
-  //  tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-  //  NotificationDetails(iOS: DarwinNotificationDetails(presentAlert: true)),
-  //  androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-  //);
-
   runApp(
     MultiProvider(
       providers: providerLocal(
         db: db,
-        notificationsPlugin: notificationsPlugin,
+        notificationsPlugin: flutterLocalNotificationsPlugin,
       ),
       child: const RootRestorationScope(
         restorationId: 'root',

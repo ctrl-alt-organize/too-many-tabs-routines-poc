@@ -1,10 +1,13 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path/path.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:too_many_tabs/domain/models/routines/routine_summary.dart';
+import 'package:too_many_tabs/notifications.dart';
 import 'package:too_many_tabs/routing/routes.dart';
 import 'package:too_many_tabs/ui/core/loader.dart';
 import 'package:too_many_tabs/ui/core/ui/floating_action.dart';
@@ -40,6 +43,32 @@ class HomeScreenState extends State<HomeScreen> {
         await widget.viewModel.load.execute();
       },
     );
+    _requestPermissions();
+    _configureSelectNotificationSubject();
+
+    const MethodChannel(
+      'com.example.tooManyTabs/settings',
+    ).setMethodCallHandler((MethodCall call) async {
+      debugPrint(call.method);
+    });
+  }
+
+  Future<void> _requestPermissions() async {
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin
+        >()
+        ?.requestPermissions(alert: true, badge: true, sound: true);
+  }
+
+  void _configureSelectNotificationSubject() {
+    selectNotificationStream.stream.listen((
+      NotificationResponse? response,
+    ) async {
+      debugPrint(
+        'notification response payload ${response?.payload} data ${response?.data}',
+      );
+    });
   }
 
   @override

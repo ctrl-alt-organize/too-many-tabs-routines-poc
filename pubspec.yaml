@@ -43,9 +43,9 @@ dependencies:
   flutter_slidable: ^4.0.3
   sync: ^0.3.0
   sliding_up_panel: ^2.0.0+1
-  flutter_local_notifications: ^19.5.0
   timezone: ^0.10.1
   share_plus: ^12.0.1
+  flutter_local_notifications: ^19.5.0
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,5 @@
-import Flutter
 import UIKit
+import Flutter
 import flutter_local_notifications
 
 @main
@@ -18,5 +18,18 @@ import flutter_local_notifications
 
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  @available(iOS 12.0, *)
+  override func userNotificationCenter(
+      _ center: UNUserNotificationCenter,
+      openSettingsFor notification: UNNotification?
+  ) {
+      let controller = window?.rootViewController as! FlutterViewController
+      let channel = FlutterMethodChannel(
+          name: "com.example.tooManyTabs/settings",
+          binaryMessenger: controller.binaryMessenger)
+
+      channel.invokeMethod("showNotificationSettings", arguments: nil)
   }
 }
