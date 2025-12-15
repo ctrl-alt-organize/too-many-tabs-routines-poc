@@ -31,6 +31,7 @@ Future<tz.TZDateTime> scheduleNotification({
   required DateTime schedule,
 }) async {
   const darwinNotificationDetails = DarwinNotificationDetails(
+    interruptionLevel: InterruptionLevel.timeSensitive,
     sound: 'ding.aif',
   );
   final notificationDetails = NotificationDetails(
