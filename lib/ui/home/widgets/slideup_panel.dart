@@ -50,7 +50,7 @@ class Collapsed extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final darkMode = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      padding: EdgeInsets.only(top: 5),
+      padding: EdgeInsets.only(top: 10),
       child: ListenableBuilder(
         listenable: viewModel,
         builder: (context, _) {
@@ -70,7 +70,7 @@ class Collapsed extends StatelessWidget {
               spacing: 4,
               children: [
                 Text(
-                  'Long press to pick routines',
+                  'Free your mind',
                   style: TextStyle(
                     color: darkMode
                         ? colorScheme.onPrimaryContainer
@@ -78,7 +78,7 @@ class Collapsed extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Tap to set goals',
+                  'And your ass will follow',
                   style: TextStyle(
                     color: darkMode
                         ? colorScheme.secondary
