@@ -166,9 +166,7 @@ class HomeViewmodel extends ChangeNotifier {
       ]) {
         await _notificationsPlugin.cancel(code.code);
       }
-      _log.fine(
-        '_updateNotifications: cancelled routineHalfGoal, routineCompletedGoal',
-      );
+      _log.fine('_updateNotifications: all goal notifications were cancelled');
       _log.fine('_updateNotifications: pinnedRoutine: $_pinnedRoutine');
       if (_pinnedRoutine == null) return;
       final left = _pinnedRoutine!.goal - _pinnedRoutine!.spent;
@@ -181,9 +179,6 @@ class HomeViewmodel extends ChangeNotifier {
       final halfWay = roundedLastStarted.add(untilHalfWay);
       final scheduleHalfWay =
           untilHalfWay.inMinutes >= 20 && halfWay.isAfter(DateTime.now());
-      _log.fine(
-        '_updateNotifications: routineHalfGoal: $halfWay schedule: $scheduleHalfWay',
-      );
       if (scheduleHalfWay) {
         try {
           final sched = await scheduleNotification(
@@ -192,17 +187,14 @@ class HomeViewmodel extends ChangeNotifier {
             id: NotificationCode.routineHalfGoal,
             schedule: halfWay,
           );
-          _log.fine(
-            '_updateNotifications: scheduled routineHalfGoal at $sched',
-          );
+          _log.fine('_updateNotifications: routineHalfGoal: $sched');
         } catch (e) {
           _log.warning('_updateNotifications: schedule routineHalfGoal: $e');
         }
       }
-      if (!scheduleHalfWay && left.inMinutes >= 27) {
-        // worst case: 27 minutes left we have at least 7 min between notifications
+      if (!scheduleHalfWay && left.inMinutes >= 30) {
         try {
-          final t = DateTime.now().add(Duration(minutes: 10));
+          final t = roundedLastStarted.add(Duration(minutes: 10));
           final sched = await scheduleNotification(
             title: _pinnedRoutine!.name,
             body: "Settle in! ${left.inMinutes - 10}m left.",
@@ -210,7 +202,7 @@ class HomeViewmodel extends ChangeNotifier {
             schedule: t,
           );
           _log.fine(
-            '_updateNotifications: routineSettleCheck at $sched (${left.inMinutes - 10})',
+            '_updateNotifications: routineSettleCheck: $sched (${left.inMinutes - 10})',
           );
         } catch (e) {
           _log.warning('_updateNotifications: routineSettleCheck: $e');
@@ -221,9 +213,6 @@ class HomeViewmodel extends ChangeNotifier {
         _pinnedRoutine!.goal - _pinnedRoutine!.spent,
       );
       final scheduleDone = done.isAfter(DateTime.now());
-      _log.fine(
-        '_updateNotifications: routineCompletedGoal: $done schedule: $scheduleDone',
-      );
       if (scheduleDone) {
         try {
           final sched = await scheduleNotification(
@@ -232,12 +221,10 @@ class HomeViewmodel extends ChangeNotifier {
             id: NotificationCode.routineCompletedGoal,
             schedule: done,
           );
-          _log.fine(
-            '_updateNotifications: scheduled routineHalfGoal at $sched',
-          );
+          _log.fine('_updateNotifications: routineCompletedGoal: $sched');
         } catch (e) {
           _log.warning(
-            '_updateNotifications: schedule routineCompletedGoalz: $e',
+            '_updateNotifications: schedule routineCompletedGoal: $e',
           );
         }
       }
@@ -246,9 +233,6 @@ class HomeViewmodel extends ChangeNotifier {
         _pinnedRoutine!.goal - Duration(minutes: 10) - _pinnedRoutine!.spent,
       );
       final scheduleGoalIn10 = goalIn10.isAfter(DateTime.now());
-      _log.fine(
-        '_updateNotifications: routineGoalIn10Minutes: $goalIn10 schedule: $scheduleGoalIn10',
-      );
       if (scheduleGoalIn10) {
         try {
           final sched = await scheduleNotification(
@@ -257,9 +241,7 @@ class HomeViewmodel extends ChangeNotifier {
             id: NotificationCode.routineGoalIn10Minutes,
             schedule: goalIn10,
           );
-          _log.fine(
-            '_updateNotifications: scheduled routineGoalIn10Minutes at $sched',
-          );
+          _log.fine('_updateNotifications: routineGoalIn10Minutes: $sched');
         } catch (e) {
           _log.warning(
             '_updateNotifications: schedule routineGoalIn10Minutes: $e',
