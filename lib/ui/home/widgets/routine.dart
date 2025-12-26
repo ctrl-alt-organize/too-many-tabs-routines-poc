@@ -39,7 +39,7 @@ class Routine extends StatelessWidget {
         onLongPress: startStopSwitch,
         onTap: setGoal,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 0),
+          padding: EdgeInsets.symmetric(vertical: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -50,7 +50,7 @@ class Routine extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Container(
-                        width: 30,
+                        width: 7,
                         height: 30,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(7),
@@ -68,7 +68,7 @@ class Routine extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 0,
-                          vertical: 14,
+                          vertical: 12,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
