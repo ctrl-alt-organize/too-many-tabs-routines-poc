@@ -45,7 +45,7 @@ class Routine extends StatelessWidget {
       child: Container(
         color: background,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
