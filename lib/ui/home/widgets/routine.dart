@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:too_many_tabs/domain/models/routines/routine_summary.dart';
 import 'package:too_many_tabs/ui/core/ui/routine_action.dart';
 import 'package:too_many_tabs/ui/home/widgets/routine_goal_label.dart';
@@ -21,22 +20,19 @@ class Routine extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final darkMode = Theme.of(context).brightness == Brightness.dark;
-
-    return Slidable(
+    final dismissibleColors = colorCompositionFromAction(
+      context,
+      ApplicationAction.toBacklog,
+    );
+    return Dismissible(
       key: ValueKey(routine.id),
-      startActionPane: ActionPane(
-        motion: ScrollMotion(),
-        dismissible: DismissiblePane(onDismissed: archive, closeOnCancel: true),
-        children: [
-          RoutineAction(
-            icon: Icons.archive,
-            state: ApplicationAction.backlogRoutine,
-            label: 'Backlog',
-            onPressed: (_) {
-              archive();
-            },
-          ),
-        ],
+      direction: DismissDirection.startToEnd,
+      onDismissed: (direction) {
+        archive();
+      },
+      background: Container(
+        color: dismissibleColors.background,
+        child: Icon(Icons.archive, color: dismissibleColors.foreground),
       ),
       child: InkWell(
         splashColor: colorScheme.primaryContainer,
