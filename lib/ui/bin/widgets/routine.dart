@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:too_many_tabs/domain/models/routines/routine_summary.dart';
 import 'package:too_many_tabs/ui/core/ui/routine_action.dart';
 import 'package:too_many_tabs/utils/format_duration.dart';
+import 'package:too_many_tabs/ui/core/colors.dart' as comp;
 
 class Routine extends StatelessWidget {
   const Routine({
@@ -26,22 +26,23 @@ class Routine extends StatelessWidget {
     final foreground = index % 2 == (darkMode ? 0 : 1)
         ? colorScheme.onSurface
         : colorScheme.onSurface;
-    return Slidable(
-      key: key,
-      endActionPane: ActionPane(
-        dismissible: DismissiblePane(onDismissed: restore, closeOnCancel: true),
-        motion: BehindMotion(),
-        children: [
-          RoutineAction(
-            onPressed: (_) {
-              restore();
-            },
-            icon: Icons.archive,
-            state: ApplicationAction.restoreRoutine,
-            label: 'Restore',
+    final colors = comp.Colors(context, ApplicationAction.restoreRoutine);
+    return Dismissible(
+      key: ValueKey(key),
+      background: Container(
+        color: colors.background,
+        child: Padding(
+          padding: EdgeInsets.only(right: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [Icon(Icons.archive, color: colors.foreground)],
           ),
-        ],
+        ),
       ),
+      onDismissed: (_) {
+        restore();
+      },
+      direction: DismissDirection.endToStart,
       child: Container(
         color: background,
         child: Padding(

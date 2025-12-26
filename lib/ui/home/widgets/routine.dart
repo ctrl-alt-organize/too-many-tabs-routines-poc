@@ -32,7 +32,14 @@ class Routine extends StatelessWidget {
       },
       background: Container(
         color: dismissibleColors.background,
-        child: Icon(Icons.archive, color: dismissibleColors.foreground),
+        child: Padding(
+          padding: EdgeInsets.only(left: 25),
+          child: Row(
+            children: [
+              Icon(Icons.archive, color: dismissibleColors.foreground),
+            ],
+          ),
+        ),
       ),
       child: InkWell(
         splashColor: colorScheme.primaryContainer,
