@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:too_many_tabs/domain/models/routines/routine_summary.dart';
 import 'package:too_many_tabs/ui/core/ui/routine_action.dart';
@@ -41,90 +42,110 @@ class Routine extends StatelessWidget {
           ),
         ),
       ),
-      child: InkWell(
-        splashColor: colorScheme.primaryContainer,
-        onLongPress: startStopSwitch,
-        onTap: setGoal,
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * .5 + 20,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: routine.running ? 10 : 0),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Container(
+                decoration: routine.running
+                    ? BoxDecoration(
+                        color: colorScheme.primaryContainer.withAlpha(20),
+                        borderRadius: BorderRadius.circular(10),
+                      )
+                    : BoxDecoration(),
+              ),
+            ),
+            InkWell(
+              splashColor: colorScheme.primaryContainer,
+              onLongPress: startStopSwitch,
+              onTap: setGoal,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 4),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Container(
-                        width: 5,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7),
-                          color: routine.running
-                              ? (darkMode
-                                    ? colorScheme.primary
-                                    : colorScheme.primary)
-                              : (darkMode
-                                    ? colorScheme.primaryContainer
-                                    : colorScheme.primaryFixed),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                routine.name.trim(),
-                                style: TextStyle(fontSize: 16),
-                                // overflow: TextOverflow.fade,
-                                softWrap: false,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * .5 + 20,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: routine.running ? 10 : 20,
+                              right: 5,
+                            ),
+                            child: Container(
+                              width: 5,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                color: routine.running
+                                    ? (darkMode
+                                          ? colorScheme.primary
+                                          : colorScheme.primary)
+                                    : (darkMode
+                                          ? colorScheme.primaryContainer
+                                          : colorScheme.primaryFixed),
                               ),
                             ),
-                            routine.running
-                                ? RoutineSpentDynamicLabel(
-                                    restorationId:
-                                        'routine_spent_dynamic_label_${routine.id}',
-                                    key: ValueKey(routine.id),
-                                    spent: routine.spent,
-                                    lastStarted: routine.lastStarted!,
-                                  )
-                                : RoutineSpentLabel(spent: routine.spent),
-                          ],
-                        ),
+                          ),
+                          Flexible(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      routine.name.trim(),
+                                      style: TextStyle(fontSize: 16),
+                                      // overflow: TextOverflow.fade,
+                                      softWrap: false,
+                                    ),
+                                  ),
+                                  routine.running
+                                      ? RoutineSpentDynamicLabel(
+                                          restorationId:
+                                              'routine_spent_dynamic_label_${routine.id}',
+                                          key: ValueKey(routine.id),
+                                          spent: routine.spent,
+                                          lastStarted: routine.lastStarted!,
+                                        )
+                                      : RoutineSpentLabel(spent: routine.spent),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: routine.running
+                          ? RoutineGoalDynamicLabel(
+                              restorationId:
+                                  'routine_goal_dynamic_label_${routine.id}',
+                              key: ValueKey(routine.id),
+                              spent: routine.spent,
+                              goal: routine.goal,
+                              running: routine.running,
+                              lastStarted: routine.lastStarted!,
+                            )
+                          : RoutineGoalLabel(
+                              spent: routine.spent,
+                              goal: routine.goal,
+                              running: routine.running,
+                            ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: routine.running
-                    ? RoutineGoalDynamicLabel(
-                        restorationId:
-                            'routine_goal_dynamic_label_${routine.id}',
-                        key: ValueKey(routine.id),
-                        spent: routine.spent,
-                        goal: routine.goal,
-                        running: routine.running,
-                        lastStarted: routine.lastStarted!,
-                      )
-                    : RoutineGoalLabel(
-                        spent: routine.spent,
-                        goal: routine.goal,
-                        running: routine.running,
-                      ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
