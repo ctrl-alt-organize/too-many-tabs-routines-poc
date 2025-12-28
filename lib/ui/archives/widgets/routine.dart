@@ -68,7 +68,7 @@ class Routine extends StatelessWidget {
       child: Container(
         color: background,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -78,7 +78,10 @@ class Routine extends StatelessWidget {
                   style: TextStyle(color: foreground),
                 ),
               ),
-              Text(formatUntilGoal(routine.goal, routine.spent)),
+              Text(
+                formatUntilGoal(routine.goal, routine.spent),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w200),
+              ),
             ],
           ),
         ),

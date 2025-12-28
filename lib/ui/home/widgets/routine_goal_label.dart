@@ -33,44 +33,16 @@ class RoutineGoalLabel extends StatelessWidget {
 
     return (running && !done)
         ? Transform.translate(
-            offset: Offset(darkMode ? 0 : 13, 0),
+            offset: Offset(10, 0),
             child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: 5,
-                horizontal: darkMode ? 0 : 15,
-              ),
-              decoration: darkMode
-                  ? null
-                  : BoxDecoration(
-                      borderRadius: BorderRadius.horizontal(
-                        left: Radius.circular(9),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: (colorScheme.primary).withAlpha(
-                            (0.04 * 255).toInt(),
-                          ),
-                          blurRadius: 4,
-                          offset: const Offset(0, -3),
-                          spreadRadius: 0,
-                        ),
-                        BoxShadow(
-                          color: (colorScheme.primary).withAlpha(
-                            (255 * 0.02).toInt(),
-                          ),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                          spreadRadius: 0,
-                        ),
-                      ],
-                    ),
+              padding: EdgeInsets.symmetric(vertical: 5),
               child: Row(
-                spacing: 2,
+                spacing: 4,
                 children: [
                   Text(
-                    'Still',
+                    'Left:',
                     style: TextStyle(
-                      fontWeight: FontWeight.w900,
+                      fontWeight: darkMode ? FontWeight.w700 : FontWeight.w900,
                       fontSize: 13,
                       color: darkMode
                           ? colorScheme.primary
@@ -80,8 +52,8 @@ class RoutineGoalLabel extends StatelessWidget {
                   Text(
                     formatUntilGoal(goal, spent),
                     style: TextStyle(
-                      fontWeight: FontWeight.w900,
                       fontSize: 13,
+                      fontWeight: darkMode ? FontWeight.w700 : FontWeight.w900,
                       color: darkMode
                           ? colorScheme.primary
                           : colorScheme.primaryContainer,
@@ -93,7 +65,7 @@ class RoutineGoalLabel extends StatelessWidget {
           )
         : done
         ? Icon(
-            Icons.done,
+            Icons.emoji_events,
             color: colorScheme.primary.withAlpha((.6 * 255).round()),
           )
         : Container(
@@ -107,13 +79,6 @@ class RoutineGoalLabel extends StatelessWidget {
                         : colorScheme.secondaryContainer)),
             ),
             child: Text(formatUntilGoal(goal, spent), style: textStyle),
-            //: Row(
-            //    spacing: 4,
-            //    children: [
-            //      Text('Done within', style: textStyle),
-            //      Text(formatUntilGoal(goal, spent), style: textStyle),
-            //    ],
-            //  )),
           );
   }
 }
