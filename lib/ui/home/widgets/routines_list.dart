@@ -43,7 +43,7 @@ class _RoutinesListState extends State<RoutinesList> {
               controller: _controller,
               slivers: [
                 SliverSafeArea(
-                  minimum: EdgeInsets.only(bottom: 180),
+                  minimum: EdgeInsets.only(bottom: 120),
                   sliver: SliverList.builder(
                     itemCount: widget.viewModel.routines.length,
                     itemBuilder: (_, index) => Routine(

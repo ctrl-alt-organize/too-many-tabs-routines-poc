@@ -113,8 +113,8 @@ class HomeScreenState extends State<HomeScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     final darkMode = Theme.of(context).brightness == Brightness.dark;
 
-    const verticalOffset = 110.0;
-    const slideUpPanelMinHeight = 100.0;
+    const double actionVerticalOffset = 40;
+    const double slideUpPanelMinHeight = 0;
     const slideUpPanelMaxHeight = 340.0;
 
     return Scaffold(
@@ -123,7 +123,7 @@ class HomeScreenState extends State<HomeScreen> {
             ? colorScheme.primaryContainer
             : colorScheme.primaryFixed,
         title: Padding(
-          padding: EdgeInsets.only(left: 5),
+          padding: EdgeInsets.all(0),
           child: ListenableBuilder(
             listenable: widget.viewModel,
             builder: (context, _) {
@@ -250,7 +250,7 @@ class HomeScreenState extends State<HomeScreen> {
                         context,
                         ApplicationAction.addRoutine,
                       ),
-                      verticalOffset: verticalOffset,
+                      verticalOffset: actionVerticalOffset,
                     ),
                   ),
             isPanelOpen || showNewRoutinePopup
@@ -266,7 +266,7 @@ class HomeScreenState extends State<HomeScreen> {
                         context,
                         ApplicationAction.backlogRoutine,
                       ),
-                      verticalOffset: verticalOffset,
+                      verticalOffset: actionVerticalOffset,
                     ),
                   ),
           ],

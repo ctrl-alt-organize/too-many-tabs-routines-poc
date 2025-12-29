@@ -43,7 +43,7 @@ class Routine extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: routine.running ? 10 : 0),
+        padding: EdgeInsets.symmetric(horizontal: routine.running ? 4 : 0),
         child: Stack(
           children: [
             Positioned.fill(
@@ -61,7 +61,12 @@ class Routine extends StatelessWidget {
               onLongPress: startStopSwitch,
               onTap: setGoal,
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 4),
+                padding: EdgeInsets.only(
+                  top: 2,
+                  bottom: 2,
+                  left: 15,
+                  right: 10,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -70,10 +75,7 @@ class Routine extends StatelessWidget {
                       child: Row(
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(
-                              left: routine.running ? 10 : 20,
-                              right: 5,
-                            ),
+                            padding: EdgeInsets.only(right: 5),
                             child: Container(
                               width: 5,
                               height: 30,
@@ -92,7 +94,7 @@ class Routine extends StatelessWidget {
                           Flexible(
                             child: Padding(
                               padding: EdgeInsets.symmetric(
-                                horizontal: 8,
+                                horizontal: 4,
                                 vertical: 2,
                               ),
                               child: Column(
@@ -124,7 +126,7 @@ class Routine extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.only(left: 20),
                       child: routine.running
                           ? RoutineGoalDynamicLabel(
                               restorationId:

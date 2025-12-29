@@ -35,85 +35,82 @@ class RoutineGoalLabel extends StatelessWidget {
     );
 
     return (running && !done)
-        ? Transform.translate(
-            offset: Offset(10, 0),
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    spacing: 3,
-                    children: [
-                      Text(
-                        'ETA:',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: darkMode
-                              ? FontWeight.w200
-                              : FontWeight.w400,
-                        ),
+        ? Container(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  spacing: 3,
+                  children: [
+                    Text(
+                      'ETA:',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: darkMode
+                            ? FontWeight.w200
+                            : FontWeight.w400,
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        spacing: 1,
-                        children: [
-                          Text(
-                            _format(eta),
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: darkMode
-                                  ? FontWeight.w300
-                                  : FontWeight.w400,
-                            ),
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      spacing: 1,
+                      children: [
+                        Text(
+                          _format(eta),
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: darkMode
+                                ? FontWeight.w300
+                                : FontWeight.w400,
                           ),
-                          Text(
-                            eta.hour >= 12 ? "pm" : "am",
-                            style: TextStyle(
-                              fontSize: 9,
-                              fontWeight: darkMode
-                                  ? FontWeight.w300
-                                  : FontWeight.w300,
-                            ),
+                        ),
+                        Text(
+                          eta.hour >= 12 ? "pm" : "am",
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: darkMode
+                                ? FontWeight.w300
+                                : FontWeight.w300,
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    spacing: 4,
-                    children: [
-                      Text(
-                        'Left:',
-                        style: TextStyle(
-                          fontWeight: darkMode
-                              ? FontWeight.w700
-                              : FontWeight.w900,
-                          fontSize: 13,
-                          color: darkMode
-                              ? colorScheme.primary
-                              : colorScheme.primaryContainer,
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  spacing: 4,
+                  children: [
+                    Text(
+                      'Left:',
+                      style: TextStyle(
+                        fontWeight: darkMode
+                            ? FontWeight.w700
+                            : FontWeight.w900,
+                        fontSize: 13,
+                        color: darkMode
+                            ? colorScheme.primary
+                            : colorScheme.primaryContainer,
                       ),
-                      Text(
-                        formatUntilGoal(goal, spent),
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: darkMode
-                              ? FontWeight.w700
-                              : FontWeight.w900,
-                          color: darkMode
-                              ? colorScheme.primary
-                              : colorScheme.primaryContainer,
-                        ),
+                    ),
+                    Text(
+                      formatUntilGoal(goal, spent),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: darkMode
+                            ? FontWeight.w700
+                            : FontWeight.w900,
+                        color: darkMode
+                            ? colorScheme.primary
+                            : colorScheme.primaryContainer,
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           )
         : done
