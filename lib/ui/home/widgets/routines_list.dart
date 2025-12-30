@@ -1,20 +1,16 @@
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:too_many_tabs/domain/models/routines/routine_summary.dart';
+import 'package:too_many_tabs/ui/home/view_models/destination_bucket.dart';
 import 'package:too_many_tabs/ui/home/view_models/home_viewmodel.dart';
 import 'package:too_many_tabs/ui/home/widgets/routine.dart';
+import 'package:too_many_tabs/ui/home/widgets/routine_menu.dart';
 
 class RoutinesList extends StatefulWidget {
-  const RoutinesList({
-    super.key,
-    required this.viewModel,
-    required this.onTap,
-    required this.pc,
-  });
+  const RoutinesList({super.key, required this.viewModel, required this.onTap});
 
   final HomeViewmodel viewModel;
   final void Function(int) onTap;
-  final PanelController pc;
 
   @override
   createState() => _RoutinesListState();
@@ -28,6 +24,8 @@ class _RoutinesListState extends State<RoutinesList> {
     _controller.dispose();
     super.dispose();
   }
+
+  RoutineSummary? tappedRoutine;
 
   @override
   build(BuildContext context) {
@@ -46,26 +44,53 @@ class _RoutinesListState extends State<RoutinesList> {
                   minimum: EdgeInsets.only(bottom: 120),
                   sliver: SliverList.builder(
                     itemCount: widget.viewModel.routines.length,
-                    itemBuilder: (_, index) => Routine(
-                      key: ValueKey(widget.viewModel.routines[index].id),
-                      routine: widget.viewModel.routines[index],
-                      setGoal: () {
-                        widget.onTap(index);
-                        widget.pc.open();
-                      },
-                      startStopSwitch: () async {
-                        await widget.viewModel.startOrStopRoutine.execute(
-                          widget.viewModel.routines[index].id,
-                        );
-                        return widget.viewModel.startOrStopRoutine.completed;
-                      },
-                      archive: () async {
-                        await widget.viewModel.archiveOrBinRoutine.execute((
-                          widget.viewModel.routines[index].id,
-                          false, // archive (bin=false)
-                        ));
-                      },
-                    ),
+                    itemBuilder: (_, index) {
+                      final routineId = widget.viewModel.routines[index].id;
+                      return Column(
+                        children: [
+                          Routine(
+                            key: ValueKey(routineId),
+                            routine: widget.viewModel.routines[index],
+                            onTap: () {
+                              widget.onTap(index);
+                              setState(() {
+                                if (tappedRoutine == null ||
+                                    (tappedRoutine != null &&
+                                        tappedRoutine!.id != routineId)) {
+                                  tappedRoutine =
+                                      widget.viewModel.routines[index];
+                                } else {
+                                  tappedRoutine = null;
+                                }
+                              });
+                            },
+                            startStopSwitch: () async {
+                              await widget.viewModel.startOrStopRoutine.execute(
+                                routineId,
+                              );
+                              return widget
+                                  .viewModel
+                                  .startOrStopRoutine
+                                  .completed;
+                            },
+                            archive: () async {
+                              await widget.viewModel.archiveOrBinRoutine
+                                  .execute((
+                                    routineId,
+                                    DestinationBucket.backlog,
+                                  ));
+                            },
+                          ),
+                          tappedRoutine != null &&
+                                  tappedRoutine!.id == routineId
+                              ? RoutineMenu(
+                                  onClose: () {},
+                                  routine: tappedRoutine!,
+                                )
+                              : SizedBox.shrink(),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],
@@ -76,3 +101,8 @@ class _RoutinesListState extends State<RoutinesList> {
     );
   }
 }
+
+//SliverList.list(
+//                      children: [
+//                      ],
+//                    )
